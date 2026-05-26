@@ -1,5 +1,6 @@
 This AutoHotkey script automatically detects active Picture-in-Picture windows from Chrome, Edge, or Firefox and snaps them to a fixed position on your screen.
-This code is for 27 inch 108p monitors. If you want to customize the coordinates, modify the 1355, 119 values inside the WinMove function.
+This code is for 27 inch 108p monitors. 
+If you want to customize the coordinates, modify the 1355, 119 values inside the WinMove function.
 
 
 ```autohotkey
