@@ -1,0 +1,37 @@
+// ==UserScript==
+// @name         Edge Pip , Show Progress Bar & Add 10 Second Buttons
+// @namespace    http://tampermonkey.net/
+// @version      1.0
+// @description  Triggers the MediaSession API to add a progress bar and 10-second skip buttons to the Edge PiP window.
+// @match        *://*/*
+// @grant        none
+// ==/UserScript==
+
+(function () {
+    'use strict';
+
+    function setup(video) {
+        if (video._pipSetupDone) return;
+        video._pipSetupDone = true;
+
+        const ms = navigator.mediaSession;
+        if (!ms) return;
+
+        // Brings up the native 10-second skip buttons and progress bar in the Edge PiP window
+        ms.setActionHandler('seekbackward', ({ seekOffset }) => {
+            video.currentTime = Math.max(0, video.currentTime - (seekOffset || 10));
+        });
+        ms.setActionHandler('seekforward',  ({ seekOffset }) => {
+            video.currentTime = Math.min(video.duration, video.currentTime + (seekOffset || 10));
+        });
+    }
+
+    // Triggers when videos start playing or when the page loads
+    window.addEventListener('play', (e) => {
+        if (e.target.tagName === 'VIDEO') setup(e.target);
+    }, true);
+
+    document.querySelectorAll('video').forEach(v => {
+        if (!v.paused) setup(v);
+    });
+})();
